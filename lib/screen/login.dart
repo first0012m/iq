@@ -1,6 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:iq/home.dart';
+import 'package:iq/api.dart';
 import 'package:iq/screen/register.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -10,7 +14,21 @@ class Login extends StatefulWidget {
 }
 
 class _HomeState extends State<Login> {
+  final TextEditingController _m_username = TextEditingController();
+  final TextEditingController _m_password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  String baseUrl = Api.Log;
+  String msg = "";
+
+  Login() async {
+    var Login = await http.post(Uri.parse(baseUrl), body: {
+      "m_username": _m_username.text,
+      "m_password": _m_password.text,
+    });
+    var data = jsonDecode(Login.body);
+    print(data);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +42,7 @@ class _HomeState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
+                  controller: _m_username,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
                     hintText: 'กรุณาชื่อผู้ใช้งาน',
@@ -33,6 +52,7 @@ class _HomeState extends State<Login> {
                       value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
+                  controller: _m_password,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.password),
                     hintText: 'กรุณากรอกรหัสผ่าน',
@@ -52,10 +72,11 @@ class _HomeState extends State<Login> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      Login();
                       // print('Form Complete');
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => const Home()),
-                          (route) => false);
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //     MaterialPageRoute(builder: (context) => const Home()),
+                      //     (route) => false);
                     }
                   },
                   child: const Text('เข้าสู่ระบบ'),
