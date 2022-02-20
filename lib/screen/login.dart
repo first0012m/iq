@@ -1,8 +1,10 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, import_of_legacy_library_into_null_safe
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:iq/api.dart';
+import 'package:iq/home.dart';
 import 'package:iq/screen/register.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,6 +30,15 @@ class _HomeState extends State<Login> {
     });
     var data = jsonDecode(Login.body);
     print(data);
+
+    if (data['level'] == '0') {
+      FlutterSession().set('token', _m_username.text);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const Home()),
+          (route) => false);
+    } else {
+      print('1');
+    }
   }
 
   @override
