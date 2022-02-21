@@ -31,8 +31,10 @@ class _HomeState extends State<Login> {
     var data = jsonDecode(Login.body);
     print(data);
 
+    String name = data['m_name'];
+
     if (data['level'] == '0') {
-      FlutterSession().set('token', _m_username.text);
+      FlutterSession().set('token', name);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const Home()),
           (route) => false);
