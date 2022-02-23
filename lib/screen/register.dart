@@ -1,10 +1,13 @@
-// ignore_for_file: non_constant_identifier_names
-
+// ignore_for_file: non_constant_identifier_names, import_of_legacy_library_into_null_safe
+import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:iq/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:iq/home.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class Regis extends StatefulWidget {
   const Regis({Key? key}) : super(key: key);
@@ -23,11 +26,12 @@ class _RegisState extends State<Regis> {
   final TextEditingController _m_email = TextEditingController();
   final TextEditingController _m_phone = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  late ProgressDialog pr;
 
   String baseUrl = Api.Reg;
   String msg = "";
 
-  Reg() async {
+  Regis() async {
     var Reg = await http.post(Uri.parse(baseUrl), body: {
       "m_id": _id.text,
       "m_username": _m_username.text,
@@ -40,7 +44,103 @@ class _RegisState extends State<Regis> {
     });
     var data = jsonDecode(Reg.body);
     print(data);
-    
+
+    if (data["status"] == 1) {
+      showDialog(
+        context: context,
+        builder: (c) {
+          return Center(
+            child: SizedBox(
+              height: 400.0,
+              width: 400.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.black,
+                    strokeWidth: 5,
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+      Timer(const Duration(milliseconds: 3000), () {
+        setState(() {
+          //print('1');
+          Navigator.of(context).pop();
+          showDialog(
+            context: context,
+            builder: (c) {
+              return CupertinoAlertDialog(
+                title: Text(data['msg']),
+                content: const Text('เข้าสู่ระบบ'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('ยกเลิก'),
+                    ),
+                  ),
+                  CupertinoDialogAction(
+                    child: TextButton(
+                      onPressed: () {
+                        FlutterSession().set('token', _m_name.text);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
+                            ),
+                            (route) => false);
+                      },
+                      child: const Text('ตกลง'),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        });
+      });
+    } else {
+      //print('err');
+      showDialog(
+        context: context,
+        builder: (c) {
+          return Center(
+            child: SizedBox(
+              height: 400.0,
+              width: 400.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.black,
+                    strokeWidth: 5,
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+      Timer(const Duration(milliseconds: 3000), () {
+        setState(() {
+          //print('0');
+          Navigator.of(context).pop();
+          showDialog(
+            context: context,
+            builder: (c) {
+              return CupertinoAlertDialog(
+                content: Text(data["msg"]),
+              );
+            },
+          );
+        });
+      });
+    }
   }
 
   @override
@@ -78,6 +178,7 @@ class _RegisState extends State<Regis> {
                 ),
                 TextFormField(
                   controller: _m_password,
+                  obscureText: true,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.password),
                     hintText: 'กรุณากรอกรหัสผ่าน',
@@ -88,6 +189,7 @@ class _RegisState extends State<Regis> {
                 ),
                 TextFormField(
                   controller: _m_passwordHid,
+                  obscureText: true,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.password_sharp),
                     hintText: 'กรุณากรอกรหัสผ่านอีกครั้ง',
@@ -147,7 +249,7 @@ class _RegisState extends State<Regis> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Reg();
+                      Regis();
                       //print('สมัครสมาชิก');
                     }
                   },

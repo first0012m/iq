@@ -66,6 +66,7 @@ class _HomeState extends State<Login> {
                 ),
                 TextFormField(
                   controller: _m_password,
+                  obscureText: true,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.password),
                     hintText: 'กรุณากรอกรหัสผ่าน',
