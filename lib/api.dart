@@ -4,5 +4,6 @@ class Api {
   static String host = 'https://iq.maews.com';
   static String Log = '$host/login.php';
   static String Reg = '$host/register.php';
+  static String Home = '$host/home.php';
 }
 // flutter run --no-sound-null-safetyq

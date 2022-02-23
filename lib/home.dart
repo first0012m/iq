@@ -1,10 +1,13 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
-
+// ignore_for_file: import_of_legacy_library_into_null_safe, non_constant_identifier_names
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_session/flutter_session.dart';
+import 'package:iq/api.dart';
 import 'package:iq/screen/about.dart';
 import 'package:iq/screen/login.dart';
 import 'package:iq/screen/room.dart';
+import 'package:http/http.dart' as http;
+import 'package:iq/service/data_service.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,20 +17,40 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late String Snapname;
+  
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: FlutterSession().get('token'),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
+          Snapname = snapshot.data;
+          //print(Snapname);
+          home(Snapname);
           return Scaffold(
-            body: const SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Center(
-                  child: Text('Home'),
-                ),
-              ),
+            body: FutureBuilder(
+              future: home(Snapname),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  print(snapshot.data);
+                  return const SafeArea(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Center(
+                        child: Text('Home'),
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Error'),
+                  );
+                }
+                return const Center(
+                  child: Text('Loading'),
+                );
+              },
             ),
             drawer: Drawer(
               child: ListView(
