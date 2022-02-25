@@ -1,6 +1,6 @@
 # iq
 
-A new Flutter project.
+นางสาวภัณฑิรา จันทร์ภูมิ
 
 ## Getting Started
 
