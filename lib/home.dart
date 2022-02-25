@@ -18,6 +18,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late String Snapname;
+
+  Future Refresh() async {}
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -32,8 +34,14 @@ class _HomeState extends State<Home> {
               if (snapshot.hasData) {
                 print(snapshot.data);
                 return Scaffold(
-                  body: Center(
-                    child: Text(snapshot.data['m_name']),
+                  body: RefreshIndicator(
+                    color: Colors.white,
+                    backgroundColor: Colors.blue,
+                    edgeOffset: 20,
+                    onRefresh: Refresh,
+                    child: Center(
+                      child: Text('Home'),
+                    ),
                   ),
                   drawer: Drawer(
                     child: ListView(
@@ -44,7 +52,8 @@ class _HomeState extends State<Home> {
                           decoration: const BoxDecoration(
                             color: Colors.blue,
                           ),
-                          child: Text('${snapshot.data['m_name']} ${snapshot.data['m_lastname']}'),
+                          child: Text(
+                              '${snapshot.data['m_name']} ${snapshot.data['m_lastname']}'),
                         ),
                         ListTile(
                           title: const Text('ห้อง'),
