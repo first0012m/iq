@@ -18,7 +18,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late String Snapname;
-  
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -27,75 +26,73 @@ class _HomeState extends State<Home> {
         if (snapshot.hasData) {
           Snapname = snapshot.data;
           //print(Snapname);
-          home(Snapname);
-          return Scaffold(
-            body: FutureBuilder(
-              future: home(Snapname),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  print(snapshot.data);
-                  return const SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(
-                        child: Text('Home'),
-                      ),
+          return FutureBuilder(
+            future: home(Snapname),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data);
+                return Scaffold(
+                  body: Center(
+                    child: Text(snapshot.data['m_name']),
+                  ),
+                  drawer: Drawer(
+                    child: ListView(
+                      // Important: Remove any padding from the ListView.
+                      padding: EdgeInsets.zero,
+                      children: [
+                        DrawerHeader(
+                          decoration: const BoxDecoration(
+                            color: Colors.blue,
+                          ),
+                          child: Text('${snapshot.data['m_name']} ${snapshot.data['m_lastname']}'),
+                        ),
+                        ListTile(
+                          title: const Text('ห้อง'),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const Room(),
+                            ));
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('รายงาน'),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          title: const Text('เกี่ยวกับ'),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const About(),
+                            ));
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('ออกจากระบบ'),
+                          onTap: () {
+                            FlutterSession().set('token', '');
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const Login()),
+                                (route) => false);
+                          },
+                        ),
+                      ],
                     ),
-                  );
-                } else if (snapshot.hasError) {
-                  return const Center(
-                    child: Text('Error'),
-                  );
-                }
-                return const Center(
-                  child: Text('Loading'),
+                  ),
                 );
-              },
-            ),
-            drawer: Drawer(
-              child: ListView(
-                // Important: Remove any padding from the ListView.
-                padding: EdgeInsets.zero,
-                children: [
-                  DrawerHeader(
-                    decoration: const BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: Text(snapshot.data),
+              } else if (snapshot.hasError) {
+                return const Scaffold(
+                  body: Center(
+                    child: Text('Error'),
                   ),
-                  ListTile(
-                    title: const Text('ห้อง'),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const Room(),
-                      ));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('รายงาน'),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    title: const Text('เกี่ยวกับ'),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const About(),
-                      ));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('ออกจากระบบ'),
-                    onTap: () {
-                      FlutterSession().set('token', '');
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => const Login()),
-                          (route) => false);
-                    },
-                  ),
-                ],
-              ),
-            ),
+                );
+              }
+              return const Scaffold(
+                body: Center(
+                  child: Text("Loading"),
+                ),
+              );
+            },
           );
         }
         return const Login();

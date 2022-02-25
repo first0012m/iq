@@ -10,6 +10,6 @@ Future home(Snapname) async {
     "m_name": Snapname,
   });
   var data = jsonDecode(Home.body);
-  return  List.from(data.map((str) => data.fromJson(str)));
+  //return List.from(data.map((str) => ListData.fromJson(str)));
+  return data;
 }
-
