@@ -1,8 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
+import 'dart:convert';
 import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iq/api.dart';
 import 'package:iq/widget/check_room.dart';
 import 'package:iq/widget/my_room.dart';
 
@@ -14,10 +16,35 @@ class Room extends StatefulWidget {
 }
 
 class _RoomState extends State<Room> {
+  // final TextEditingController _Random = TextEditingController();
+  final TextEditingController _num = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _ajname = TextEditingController();
   var rng = Random();
   int _selectedTab = 1;
   final screen = [const MyRoom(), const CheckRoom()];
   final _formKey = GlobalKey<FormState>();
+
+  String baseUrl = Api.Room;
+  String msg = "";
+  int random = 0;
+
+  @override
+  Randoms() async {
+    random = rng.nextInt(100000);
+    print(random);
+  }
+
+  Room() async {
+    var room = await http.post(Uri.parse(baseUrl), body: {
+      "m_random": random.toString(),
+      "m_num": _num.text,
+      "m_name": _name.text,
+      "m_ajname": _ajname.text
+    });
+    var data = jsonDecode(room.body);
+    print(data);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +87,7 @@ class _RoomState extends State<Room> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           AddRoom();
+          Randoms();
         },
         child: const Icon(Icons.add),
       ),
@@ -96,6 +124,7 @@ class _RoomState extends State<Room> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           print('เพิ่มห้อง');
+                          Room();
                         }
                       },
                       child: const Text(
@@ -108,23 +137,25 @@ class _RoomState extends State<Room> {
                 Expanded(
                   child: ListView(
                     children: [
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                enabled: false,
-                                labelText: 'ID',
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10))),
-                            validator: (value) {
-                              rng.nextInt(100000);
-                             // print(rng.nextInt(100000));
-                            },
-                          )),
+                      // Padding(
+                      //     padding: const EdgeInsets.symmetric(vertical: 10),
+                      //     child: TextFormField(
+                      //       controller: _Random,
+                      //       decoration: InputDecoration(
+                      //           // enabled: false,
+                      //           labelText: 'ID',
+                      //           border: OutlineInputBorder(
+                      //               borderRadius: BorderRadius.circular(10))),
+                      //       validator: (value) {
+                      //         rng.nextInt(100000);
+                      //         Room();
+                      //         // print(rng.nextInt(100000));
+                      //       },
+                      //     )),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          controller: _num,
                           decoration: InputDecoration(
                               labelText: 'รหัสวิชา',
                               border: OutlineInputBorder(
@@ -136,6 +167,7 @@ class _RoomState extends State<Room> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          controller: _name,
                           decoration: InputDecoration(
                               labelText: 'ชื่อวิชา',
                               border: OutlineInputBorder(
@@ -147,6 +179,7 @@ class _RoomState extends State<Room> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
+                          controller: _ajname,
                           decoration: InputDecoration(
                               labelText: 'ชื่อผู้สอน',
                               border: OutlineInputBorder(
