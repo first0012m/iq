@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_session/flutter_session.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iq/api.dart';
 import 'package:iq/service/data_dalete_myroom.dart';
 import 'package:iq/service/data_myroom.dart';
@@ -78,7 +77,12 @@ class _MyRoomState extends State<MyRoom> {
                             });
                           },
                           icon: const Icon(Icons.delete)),
-                      IconButton(onPressed: () {}, icon:const Icon(Icons.more_vert)),
+                      IconButton(
+                          onPressed: () {
+                            Sheet(list[index]['m_random'], list[index]['m_num'],
+                                list[index]['m_name']);
+                          },
+                          icon: const Icon(Icons.more_vert)),
                     ],
                   ),
                 );
@@ -174,6 +178,162 @@ class _MyRoomState extends State<MyRoom> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
                           controller: _name,
+                          decoration: InputDecoration(
+                              labelText: 'ชื่อวิชา',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          validator: (String? value) =>
+                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> Sheet(m_random, m_num, m_name) async {
+    return showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'ยกเลิก',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      EditRoom(m_num, m_name);
+                    },
+                    child: const Text(
+                      'แก้ไข',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'รหัสห้อง : $m_random',
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'รหัสวิชา : $m_num',
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'ชื่อวิชา   : $m_name',
+                            style: const TextStyle(fontSize: 24),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> EditRoom(m_num, m_name) async {
+    TextEditingController m_num = TextEditingController();
+    TextEditingController m_name = TextEditingController();
+    return showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+      context: context,
+      builder: (context) {
+        return Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'ยกเลิก',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          print('อัปเดต');
+                        }
+                      },
+                      child: const Text(
+                        'อัปเดต',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: m_num,
+                          decoration: InputDecoration(
+                              labelText: 'รหัสวิชา',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          validator: (String? value) =>
+                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          controller: m_name,
                           decoration: InputDecoration(
                               labelText: 'ชื่อวิชา',
                               border: OutlineInputBorder(
