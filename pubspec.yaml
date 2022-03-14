@@ -36,6 +36,7 @@ dependencies:
   progress_dialog: ^1.2.4
   cupertino_icons: ^1.0.2
   flutter_session: ^0.1.1
+  flutter_slidable: ^1.2.0
   http: ^0.13.4
 
 dev_dependencies:
