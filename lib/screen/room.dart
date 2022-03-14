@@ -17,35 +17,8 @@ class Room extends StatefulWidget {
 }
 
 class _RoomState extends State<Room> {
-  // final TextEditingController _Random = TextEditingController();
-  final TextEditingController _num = TextEditingController();
-  final TextEditingController _name = TextEditingController();
-  // final TextEditingController _ajname = TextEditingController();
-  var rng = Random();
   int _selectedTab = 1;
   final screen = [const MyRoom(), const CheckRoom()];
-  final _formKey = GlobalKey<FormState>();
-
-  String baseUrl = Api.Room;
-  String msg = "";
-  int random = 0;
-
-  @override
-  Randoms() async {
-    random = rng.nextInt(100000);
-    print(random);
-  }
-
-  Room() async {
-    var room = await http.post(Uri.parse(baseUrl), body: {
-      "m_random": random.toString(),
-      "m_num": _num.text,
-      "m_name": _name.text,
-      "m_ajname": await FlutterSession().get('token')
-    });
-    var data = jsonDecode(room.body);
-    print(data);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,103 +58,6 @@ class _RoomState extends State<Room> {
         ),
       ),
       body: screen[_selectedTab],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          AddRoom();
-          Randoms();
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Future<void> AddRoom() async {
-    return showModalBottomSheet(
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-      context: context,
-      builder: (context) {
-        return Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'ยกเลิก',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          print('เพิ่มห้อง');
-                          Room();
-                        }
-                      },
-                      child: const Text(
-                        'เพิ่ม',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
-                          controller: _num,
-                          decoration: InputDecoration(
-                              labelText: 'รหัสวิชา',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
-                          controller: _name,
-                          decoration: InputDecoration(
-                              labelText: 'ชื่อวิชา',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(vertical: 10),
-                      //   child: TextFormField(
-                      //     controller: _ajname,
-                      //     decoration: InputDecoration(
-                      //         labelText: 'ชื่อผู้สอน',
-                      //         border: OutlineInputBorder(
-                      //             borderRadius: BorderRadius.circular(10))),
-                      //     validator: (String? value) =>
-                      //         value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }
