@@ -7,7 +7,7 @@ String msg = "";
 
 Future home(Snapname) async {
   http.Response Home = await http.post(Uri.parse(baseUrl), body: {
-    "m_name": Snapname,
+    "m_email": Snapname,
   });
   var data = jsonDecode(Home.body);
   //return List.from(data.map((str) => ListData.fromJson(str)));

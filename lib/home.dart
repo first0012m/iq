@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           Snapname = snapshot.data;
-          //print(Snapname);
+          print(Snapname);
           return FutureBuilder(
             future: home(Snapname),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -95,6 +95,7 @@ class _HomeState extends State<Home> {
                     child: Text('Error'),
                   ),
                 );
+                // return const Login();
               }
               return const Scaffold(
                 body: Center(

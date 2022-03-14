@@ -22,16 +22,17 @@ class _HomeState extends State<Login> {
 
   String baseUrl = Api.Log;
   String msg = "";
+  String name = "";
 
   Login() async {
     var Login = await http.post(Uri.parse(baseUrl), body: {
       "m_username": _m_username.text,
       "m_password": _m_password.text,
     });
-    var data = jsonDecode(Login.body);
+     var data = jsonDecode(Login.body);
     print(data);
 
-    String name = data['m_name'];
+    name = data['m_email'];
 
     if (data['level'] == '0') {
       FlutterSession().set('token', name);

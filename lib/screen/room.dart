@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class _RoomState extends State<Room> {
   // final TextEditingController _Random = TextEditingController();
   final TextEditingController _num = TextEditingController();
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _ajname = TextEditingController();
+  // final TextEditingController _ajname = TextEditingController();
   var rng = Random();
   int _selectedTab = 1;
   final screen = [const MyRoom(), const CheckRoom()];
@@ -40,7 +41,7 @@ class _RoomState extends State<Room> {
       "m_random": random.toString(),
       "m_num": _num.text,
       "m_name": _name.text,
-      "m_ajname": _ajname.text
+      "m_ajname": await FlutterSession().get('token')
     });
     var data = jsonDecode(room.body);
     print(data);
@@ -137,21 +138,6 @@ class _RoomState extends State<Room> {
                 Expanded(
                   child: ListView(
                     children: [
-                      // Padding(
-                      //     padding: const EdgeInsets.symmetric(vertical: 10),
-                      //     child: TextFormField(
-                      //       controller: _Random,
-                      //       decoration: InputDecoration(
-                      //           // enabled: false,
-                      //           labelText: 'ID',
-                      //           border: OutlineInputBorder(
-                      //               borderRadius: BorderRadius.circular(10))),
-                      //       validator: (value) {
-                      //         rng.nextInt(100000);
-                      //         Room();
-                      //         // print(rng.nextInt(100000));
-                      //       },
-                      //     )),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
@@ -176,18 +162,18 @@ class _RoomState extends State<Room> {
                               value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
-                          controller: _ajname,
-                          decoration: InputDecoration(
-                              labelText: 'ชื่อผู้สอน',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(vertical: 10),
+                      //   child: TextFormField(
+                      //     controller: _ajname,
+                      //     decoration: InputDecoration(
+                      //         labelText: 'ชื่อผู้สอน',
+                      //         border: OutlineInputBorder(
+                      //             borderRadius: BorderRadius.circular(10))),
+                      //     validator: (String? value) =>
+                      //         value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
