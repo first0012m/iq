@@ -67,14 +67,19 @@ class _MyRoomState extends State<MyRoom> {
                 m_name = list[index]['m_name'];
                 return ListTile(
                   title: Text(m_num + ' ' + m_name),
-                  trailing: GestureDetector(
-                    child: Icon(Icons.delete),
-                    onTap: () {
-                      setState(() {
-                        Delete_My_room(list[index]['m_random'],
-                            list[index]['m_num'], list[index]['m_name']);
-                      });
-                    },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              Delete_My_room(list[index]['m_random'],
+                                  list[index]['m_num'], list[index]['m_name']);
+                            });
+                          },
+                          icon: const Icon(Icons.delete)),
+                      IconButton(onPressed: () {}, icon:const Icon(Icons.more_vert)),
+                    ],
                   ),
                 );
               },
@@ -89,7 +94,7 @@ class _MyRoomState extends State<MyRoom> {
           );
         } else if (snapshot.hasError) {
           return Scaffold(
-            body: Center(
+            body: const Center(
               child: Text('ไม่มีข้อมูล'),
             ),
             floatingActionButton: FloatingActionButton(
