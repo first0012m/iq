@@ -90,9 +90,24 @@ class _HomeState extends State<Home> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return const Scaffold(
+                return Scaffold(
                   body: Center(
-                    child: Text('Error'),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Error'),
+                        TextButton(
+                            onPressed: () {
+                              FlutterSession().set('token', '');
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const Login()),
+                                  (route) => false);
+                            },
+                            child: const Text('ออกจากระบบ'))
+                      ],
+                    ),
                   ),
                 );
                 // return const Login();

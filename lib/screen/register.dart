@@ -31,6 +31,8 @@ class _RegisState extends State<Regis> {
   String baseUrl = Api.Reg;
   String msg = "";
 
+  
+
   Regis() async {
     var Reg = await http.post(Uri.parse(baseUrl), body: {
       "m_id": _id.text,
@@ -88,7 +90,7 @@ class _RegisState extends State<Regis> {
                   CupertinoDialogAction(
                     child: TextButton(
                       onPressed: () {
-                        FlutterSession().set('token', _m_name.text);
+                        FlutterSession().set('token', _m_email.text);
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => const Home(),
@@ -155,7 +157,7 @@ class _RegisState extends State<Regis> {
             child: Column(
               children: [
                 TextFormField(
-                  keyboardType: TextInputType.number,
+                  //keyboardType: TextInputType.number,
                   controller: _id,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.format_list_numbered),
@@ -166,7 +168,7 @@ class _RegisState extends State<Regis> {
                       value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.name,
+                  //keyboardType: TextInputType.name,
                   controller: _m_username,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
@@ -199,7 +201,7 @@ class _RegisState extends State<Regis> {
                       value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.name,
+                  //keyboardType: TextInputType.name,
                   controller: _m_name,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.ac_unit_sharp),
@@ -210,7 +212,7 @@ class _RegisState extends State<Regis> {
                       value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.name,
+                  //keyboardType: TextInputType.name,
                   controller: _m_lastname,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today),
@@ -221,7 +223,7 @@ class _RegisState extends State<Regis> {
                       value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.emailAddress,
+                  //keyboardType: TextInputType.emailAddress,
                   controller: _m_email,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.email),
@@ -232,7 +234,7 @@ class _RegisState extends State<Regis> {
                       value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.phone,
+                  //keyboardType: TextInputType.phone,
                   controller: _m_phone,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.phone),

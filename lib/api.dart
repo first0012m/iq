@@ -8,5 +8,9 @@ class Api {
   static String Room = '$host/room.php';
   static String My_Room = '$host/my_room.php';
   static String Delete_My_Room = '$host/delete_my_room.php';
+  static String Add_Check_Room = '$host/add_check_room.php';
+  static String Join_Room = '$host/join_room.php';
+  static String Check_Room = '$host/check_room.php';
+  static String Delete_Check_Room = '$host/delete_check_room.php';
 }
 // flutter run --no-sound-null-safetyq
