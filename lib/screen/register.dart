@@ -3,14 +3,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
 import 'package:iq/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:iq/home.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Regis extends StatefulWidget {
-  const Regis({Key? key}) : super(key: key);
+  const Regis({Key key}) : super(key: key);
 
   @override
   State<Regis> createState() => _RegisState();
@@ -26,14 +26,13 @@ class _RegisState extends State<Regis> {
   final TextEditingController _m_email = TextEditingController();
   final TextEditingController _m_phone = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late ProgressDialog pr;
+  ProgressDialog pr;
 
   String baseUrl = Api.Reg;
   String msg = "";
 
-  
-
   Regis() async {
+    final prefs = await SharedPreferences.getInstance();
     var Reg = await http.post(Uri.parse(baseUrl), body: {
       "m_id": _id.text,
       "m_username": _m_username.text,
@@ -90,7 +89,7 @@ class _RegisState extends State<Regis> {
                   CupertinoDialogAction(
                     child: TextButton(
                       onPressed: () {
-                        FlutterSession().set('token', _m_email.text);
+                        prefs.setString('token', _m_email.text);
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => const Home(),
@@ -164,8 +163,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอก ID',
                     labelText: 'ID',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   //keyboardType: TextInputType.name,
@@ -175,8 +174,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอกชื่อผู้ใช้',
                     labelText: 'ชื่อผู้ใช้',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   controller: _m_password,
@@ -186,8 +185,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอกรหัสผ่าน',
                     labelText: 'รหัสผ่าน',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   controller: _m_passwordHid,
@@ -197,8 +196,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอกรหัสผ่านอีกครั้ง',
                     labelText: 'ยืนยันรหัสผ่าน',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   //keyboardType: TextInputType.name,
@@ -208,8 +207,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอกชื่อ',
                     labelText: 'ชื่อ',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   //keyboardType: TextInputType.name,
@@ -219,8 +218,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอกนามสกุล',
                     labelText: 'นามสกุล',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   //keyboardType: TextInputType.emailAddress,
@@ -230,8 +229,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอก E-mail',
                     labelText: 'E-mail',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   //keyboardType: TextInputType.phone,
@@ -241,8 +240,8 @@ class _RegisState extends State<Regis> {
                     hintText: 'กรุณากรอกเบอร์โทรศัพท์',
                     labelText: 'เบอร์โทรศัพท์',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 MaterialButton(
                   shape: RoundedRectangleBorder(
@@ -250,7 +249,7 @@ class _RegisState extends State<Regis> {
                   color: Colors.blue,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState.validate()) {
                       Regis();
                       //print('สมัครสมาชิก');
                     }

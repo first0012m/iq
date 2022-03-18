@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
 import 'package:iq/api.dart';
 import 'package:iq/service/data_dalete_myroom.dart';
 import 'package:iq/service/data_myroom.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyRoom extends StatefulWidget {
-  const MyRoom({Key? key}) : super(key: key);
+  const MyRoom({Key key}) : super(key: key);
 
   @override
   State<MyRoom> createState() => _MyRoomState();
@@ -23,10 +23,10 @@ class _MyRoomState extends State<MyRoom> {
 
   String msg = "";
   int random = 0;
-  late List list;
-  late String m_random;
-  late String m_num;
-  late String m_name;
+   List list;
+   String m_random;
+   String m_num;
+   String m_name;
 
   Randoms() async {
     random = rng.nextInt(100000);
@@ -34,11 +34,12 @@ class _MyRoomState extends State<MyRoom> {
   }
 
   Room() async {
+    final prefs = await SharedPreferences.getInstance();
     var room = await http.post(Uri.parse(baseUrl), body: {
       "m_random": random.toString(),
       "m_num": _num.text,
       "m_name": _name.text,
-      "m_ajname": await FlutterSession().get('token')
+      "m_ajname": await prefs.getString('token')
     });
     var data = jsonDecode(room.body);
     _num.clear();
@@ -147,7 +148,7 @@ class _MyRoomState extends State<MyRoom> {
                     ),
                     TextButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState.validate()) {
                           print('เพิ่มห้อง');
                           Room();
                         }
@@ -170,8 +171,8 @@ class _MyRoomState extends State<MyRoom> {
                               labelText: 'รหัสวิชา',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                          validator: (String value) =>
+                              value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                         ),
                       ),
                       Padding(
@@ -182,8 +183,8 @@ class _MyRoomState extends State<MyRoom> {
                               labelText: 'ชื่อวิชา',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                          validator: (String value) =>
+                              value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                         ),
                       ),
                     ],
@@ -303,7 +304,7 @@ class _MyRoomState extends State<MyRoom> {
                     ),
                     TextButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState.validate()) {
                           print('อัปเดต');
                         }
                       },
@@ -326,8 +327,8 @@ class _MyRoomState extends State<MyRoom> {
                               labelText: 'รหัสวิชา',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                          validator: (String value) =>
+                              value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                         ),
                       ),
                       Padding(
@@ -338,8 +339,8 @@ class _MyRoomState extends State<MyRoom> {
                               labelText: 'ชื่อวิชา',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          validator: (String? value) =>
-                              value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                          validator: (String value) =>
+                              value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                         ),
                       ),
                     ],

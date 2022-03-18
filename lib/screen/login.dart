@@ -2,14 +2,14 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
 import 'package:iq/api.dart';
 import 'package:iq/home.dart';
 import 'package:iq/screen/register.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({Key key}) : super(key: key);
 
   @override
   State<Login> createState() => _HomeState();
@@ -29,13 +29,15 @@ class _HomeState extends State<Login> {
       "m_username": _m_username.text,
       "m_password": _m_password.text,
     });
-     var data = jsonDecode(Login.body);
+    var data = jsonDecode(Login.body);
     print(data);
 
     name = data['m_email'];
 
     if (data['level'] == '0') {
-      FlutterSession().set('token', name);
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString('token', name);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const Home()),
           (route) => false);
@@ -62,8 +64,8 @@ class _HomeState extends State<Login> {
                     hintText: 'กรุณาชื่อผู้ใช้งาน',
                     labelText: 'ชื่อผู้ใช้',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 TextFormField(
                   controller: _m_password,
@@ -73,8 +75,8 @@ class _HomeState extends State<Login> {
                     hintText: 'กรุณากรอกรหัสผ่าน',
                     labelText: 'รหัสผ่าน',
                   ),
-                  validator: (String? value) =>
-                      value!.isEmpty ? 'กรุณากรอกข้อมูล' : null,
+                  validator: (String value) =>
+                      value.isEmpty ? 'กรุณากรอกข้อมูล' : null,
                 ),
                 const SizedBox(
                   height: 10,
@@ -86,7 +88,7 @@ class _HomeState extends State<Login> {
                   color: Colors.blue,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState.validate()) {
                       Login();
                       // print('Form Complete');
                       // Navigator.of(context).pushAndRemoveUntil(

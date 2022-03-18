@@ -1,29 +1,37 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe, non_constant_identifier_names
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
-import 'package:iq/api.dart';
 import 'package:iq/screen/about.dart';
 import 'package:iq/screen/login.dart';
 import 'package:iq/screen/room.dart';
-import 'package:http/http.dart' as http;
 import 'package:iq/service/data_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({Key key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  late String Snapname;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<String> _token;
+  // final  String action = await prefs.getString('action');
+  String Snapname;
+  @override
+  void initState() {
+    _token = _prefs.then((SharedPreferences prefs) {
+      return prefs.getString('token');
+    });
+    super.initState();
+  }
 
+  @override
   Future Refresh() async {}
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: FlutterSession().get('token'),
+      future: _token,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           Snapname = snapshot.data;
@@ -34,12 +42,13 @@ class _HomeState extends State<Home> {
               if (snapshot.hasData) {
                 print(snapshot.data);
                 return Scaffold(
+                  appBar: AppBar(),
                   body: RefreshIndicator(
                     color: Colors.white,
                     backgroundColor: Colors.blue,
                     edgeOffset: 20,
                     onRefresh: Refresh,
-                    child: Center(
+                    child: const Center(
                       child: Text('Home'),
                     ),
                   ),
@@ -77,8 +86,8 @@ class _HomeState extends State<Home> {
                         ),
                         ListTile(
                           title: const Text('ออกจากระบบ'),
-                          onTap: () {
-                            FlutterSession().set('token', '');
+                          onTap: () async {
+                            final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();sharedPreferences.setString('token', '');
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => const Login()),
@@ -98,8 +107,8 @@ class _HomeState extends State<Home> {
                       children: [
                         const Text('Error'),
                         TextButton(
-                            onPressed: () {
-                              FlutterSession().set('token', '');
+                            onPressed: () async {
+                              final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();sharedPreferences.setString('token', '');
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) => const Login()),

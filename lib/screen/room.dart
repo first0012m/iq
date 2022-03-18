@@ -1,16 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
-import 'dart:convert';
-import 'dart:math';
-import 'package:flutter_session/flutter_session.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iq/api.dart';
 import 'package:iq/widget/check_room.dart';
 import 'package:iq/widget/my_room.dart';
 
 class Room extends StatefulWidget {
-  const Room({Key? key}) : super(key: key);
+  const Room({Key key}) : super(key: key);
 
   @override
   State<Room> createState() => _RoomState();
@@ -25,11 +20,11 @@ class _RoomState extends State<Room> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
         centerTitle: true,
         bottom: PreferredSize(
-          child: Padding(
+          child: Container(
             padding: const EdgeInsets.all(10),
+            color: Colors.grey[50],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

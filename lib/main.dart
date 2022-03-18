@@ -1,14 +1,15 @@
 // ignore_for_file: unused_import, import_of_legacy_library_into_null_safe
-
+library flutter_session;
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iq/home.dart';
 import 'package:iq/screen/login.dart';
 import 'package:iq/screen/register.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  dynamic token = await FlutterSession().get('token');
+  final prefs = await SharedPreferences.getInstance();
+  
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -16,7 +17,7 @@ Future<void> main() async {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: token != '' ? const Home() : const Login(),
+      home: prefs.getString('token') != '' ? const Home() : const Login(),
     ),
   );
 }
